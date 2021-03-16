@@ -8,7 +8,7 @@ func main() {
 	app := fiber.New()
 
 	app.Get("/:id", func(c *fiber.Ctx) error {
-		// c.SendString()
+		c.SendString(c.Params("id"))
 
 		return c.JSON(fiber.Map{
 			"name": c.Params("id"),
