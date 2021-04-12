@@ -6,34 +6,30 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-
-
-
 func GetPosts(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"someKey": "someValue",
 	})
 }
 
-
-
-
 func PostPost(c *fiber.Ctx) error {
 	db := database.DBConn
 
 	post := new(table.Post)
 	if err := c.BodyParser(post); err != nil {
-		c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
+		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
 			"message":     "error",
 			"description": "invalid data",
 		})
 	}
 
-	postedPost := db.Create(post)
+	// fmt.Println(post)
+
+	db.Create(&post)
 
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
 		"message":    "success",
 		"desciprion": "successfully added a post",
-		"addedPost":  postedPost,
+		"addedPost":  post,
 	})
 }

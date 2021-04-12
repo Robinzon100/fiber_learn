@@ -1,17 +1,19 @@
 package table
 
 import (
-	"time"
-
+	uuid "github.com/satori/go.uuid"
 	"gorm.io/gorm"
 )
 
 type Post struct {
 	gorm.Model
-	ID          uint   `json:"id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
-	DeletedAt   gorm.DeletedAt `gorm:"index"`
+	ID          uuid.UUID `json:"id",gorm:"type:uuid;primary_key;"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+}
+
+// BeforeCreate will set a UUID rather than numeric ID.
+func (post *Post) BeforeCreate(tx *gorm.DB) (err error) {
+	post.ID = uuid.NewV4()
+	return
 }
