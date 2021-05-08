@@ -1,35 +1,46 @@
-package post
+package controller
 
 import (
 	database "github.com/Robinzon100/fiber/database"
-	table "github.com/Robinzon100/fiber/database/migrations/tables"
+	"github.com/Robinzon100/fiber/database/models"
 	"github.com/gofiber/fiber/v2"
 )
 
-func GetPosts(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{
-		"someKey": "someValue",
-	})
-}
+func GetAllPosts(c *fiber.Ctx) error {
+	var posts []models.Post
+	res := database.DBConn.Find(&posts)
 
-func PostPost(c *fiber.Ctx) error {
-	db := database.DBConn
-
-	post := new(table.Post)
-	if err := c.BodyParser(post); err != nil {
-		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
-			"message":     "error",
-			"description": "invalid data",
+	if res.Error != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": true,
+			"msg":   res.Error,
 		})
 	}
 
-	// fmt.Println(post)
-
-	db.Create(&post)
-
-	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
-		"message":    "success",
-		"desciprion": "successfully added a post",
-		"addedPost":  post,
+	return c.Status(fiber.StatusFound).JSON(fiber.Map{
+		"allPosts": posts,
+		"something": "something",
 	})
 }
+
+// func PostPost(c *fiber.Ctx) error {
+// 	db := database.DBConn
+
+// 	post := new(models.Post)
+// 	if err := c.BodyParser(post); err != nil {
+// 		return c.Status(fiber.ErrBadRequest.Code).JSON(fiber.Map{
+// 			"message":     "error",
+// 			"description": "invalid data",
+// 		})
+// 	}
+
+// 	// fmt.Println(post)
+
+// 	db.Create(&post)
+
+// 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+// 		"message":    "success",
+// 		"desciprion": "successfully added a post",
+// 		"addedPost":  post,
+// 	})
+// }

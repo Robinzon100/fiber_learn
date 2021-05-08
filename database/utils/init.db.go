@@ -1,8 +1,9 @@
 package dbUtils
 
 import (
-	"github.com/Robinzon100/fiber/database"
-	migration "github.com/Robinzon100/fiber/database/migrations"
+	database "github.com/Robinzon100/fiber/database"
+	migration "github.com/Robinzon100/fiber/database/migration"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -12,6 +13,7 @@ func InitDatabase() {
 		DSN:                  "host=localhost user=admin password=admin dbname=oxeni port=5432 sslmode=disable TimeZone=Asia/Shanghai",
 		PreferSimpleProtocol: true,
 	}), &gorm.Config{})
+
 	if err != nil {
 		panic("failed to connect database")
 	}

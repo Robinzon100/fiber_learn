@@ -23,17 +23,19 @@ func main() {
 	app.Use(cors.New())
 	app.Use(logger.New())
 
+
 	// =====> DB
 	dbUtils.InitDatabase()
 	// defer database.DBConn.()
 	// defer database.DB.Close()
+
 
 	// =====> Api
 	api := app.Group("/api")
 	apiV1.Api_main(api)
 
 	// =====> Server
-	err := app.Listen(":3000")
+	err := app.Listen(":5000")
 	if err != nil {
 		panic(err)
 	}
